@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sign_navigation"
+    app:startDestination="@id/fragment_sign">
+
+    <fragment
+        android:id="@+id/fragment_sign"
+        android:name="com.funin.todo.ui.sign.SignFragment" />
+
+    <fragment
+        android:id="@+id/fragment_sign_up"
+        android:name="com.funin.todo.ui.sign.SignUpFragment" />
+
+</navigation>
