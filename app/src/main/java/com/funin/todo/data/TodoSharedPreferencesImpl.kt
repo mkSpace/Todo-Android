@@ -19,7 +19,7 @@ object TodoSharedPreferencesImpl : TodoSharedPreferences {
 
     override fun saveAccessToken(token: String?) {
         sharedPreferences.edit {
-            if(token == null) {
+            if (token == null) {
                 remove(KEY_ACCESS_TOKEN)
             } else {
                 putString(KEY_ACCESS_TOKEN, token)

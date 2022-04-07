@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class AuthorizationInterceptor @Inject constructor(
     private val preferences: TodoSharedPreferences
-): Interceptor {
+) : Interceptor {
     companion object {
         private const val KEY_AUTHORIZATION = "Authorization"
     }

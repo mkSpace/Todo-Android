@@ -17,7 +17,7 @@ import com.funin.todo.data.vo.User
     version = 1
 )
 @TypeConverters(TodoDatabaseConverters::class)
-abstract class TodoDatabase : RoomDatabase(){
+abstract class TodoDatabase : RoomDatabase() {
 
     companion object {
         @Volatile
