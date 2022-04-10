@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.funin.todo.data.db.converters.TodoDatabaseConverters
 import com.funin.todo.data.vo.Me
 import com.funin.todo.data.vo.User
 
@@ -16,7 +14,6 @@ import com.funin.todo.data.vo.User
     ],
     version = 1
 )
-@TypeConverters(TodoDatabaseConverters::class)
 abstract class TodoDatabase : RoomDatabase() {
 
     companion object {
