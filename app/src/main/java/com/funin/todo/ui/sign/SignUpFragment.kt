@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -29,7 +30,6 @@ class SignUpFragment : BaseViewModelFragment() {
     }
 
     override fun onSetupViews(view: View) {
-        super.onSetupViews(view)
         binding.userEmailEditTextView.doOnTextChanged { text, _, _, _ ->
             viewModel.setEmailField(text.toString())
         }
@@ -42,12 +42,19 @@ class SignUpFragment : BaseViewModelFragment() {
         binding.userRePasswordEditTextView.doOnTextChanged { text, _, _, _ ->
             viewModel.setRewritePasswordField(text.toString())
         }
+        binding.signUpButton.setOnClickListener { viewModel.signup() }
     }
 
     override fun onBindViewModelsOnViewCreated() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.isSignUpButtonEnabled.collectLatest {
                 binding.signUpButton.isEnabled = it
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.isLoading.collectLatest {
+                binding.loadingView.isVisible = it
             }
         }
     }

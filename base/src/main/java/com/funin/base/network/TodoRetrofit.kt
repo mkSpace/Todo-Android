@@ -6,8 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object TodoRetrofit {
 
-    const val BASE_URL =
-        "http://ec2-3-36-247-44.ap-northeast-2.compute.amazonaws.com//api/v1/"
+    const val BASE_URL = "http://ec2-3-36-247-44.ap-northeast-2.compute.amazonaws.com/api/v1/"
 
     fun <T> create(
         service: Class<T>,

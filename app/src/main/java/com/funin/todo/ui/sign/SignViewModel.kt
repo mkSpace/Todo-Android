@@ -3,23 +3,26 @@ package com.funin.todo.ui.sign
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.funin.base.extensions.combine
+import com.funin.todo.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class SignViewModel : ViewModel() {
+class SignViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _emailField: MutableStateFlow<String?> = MutableStateFlow("")
-    val emailField: StateFlow<String?> = _emailField
 
     private val _nicknameField: MutableStateFlow<String?> = MutableStateFlow("")
-    val nicknameField: StateFlow<String?> = _nicknameField
 
     private val _passwordField: MutableStateFlow<String?> = MutableStateFlow("")
-    val passwordField: StateFlow<String?> = _passwordField
 
     private val _rewritePasswordField: MutableStateFlow<String?> = MutableStateFlow("")
-    val rewritePasswordField: StateFlow<String?> = _rewritePasswordField
+
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     val isSignUpButtonEnabled: StateFlow<Boolean> = _passwordField.combine(_rewritePasswordField)
         .map { (password, rewirePassword) ->
