@@ -19,7 +19,17 @@ class AuthRepository @Inject constructor(
     suspend fun signup(email: String, nickname: String, password: String) {
         val response = remote.signup(email, nickname, password).data ?: return
         todoPreferences.saveAccessToken(response.accessToken)
-        userDao.insert(User(id = response.userId, nickname = response.nickname))
-        meDao.insert(Me(response.userId))
+        saveMe(response.userId, response.nickname)
+    }
+
+    suspend fun login(email: String, password: String) {
+        val response = remote.login(email, password).data ?: return
+        todoPreferences.saveAccessToken(response.accessToken)
+        saveMe(response.userId, response.nickname)
+    }
+
+    private fun saveMe(userId: Int, nickname: String) {
+        userDao.insert(User(id = userId, nickname = nickname))
+        meDao.insert(Me(userId))
     }
 }

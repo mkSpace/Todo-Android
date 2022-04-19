@@ -19,4 +19,13 @@ class AuthRemoteDataSource @Inject constructor(private val service: AuthService)
             }
         )
     }
+
+    suspend fun login(email: String, password: String): Response<TokenAndUser> {
+        return service.login(
+            requestBodyOf {
+                "email" to email
+                "password" to password
+            }
+        )
+    }
 }
