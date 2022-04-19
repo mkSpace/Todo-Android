@@ -55,7 +55,7 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
     // Navigation
-    def navigation_version = "2.4.1"
+    def navigation_version = "2.4.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
     implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
 
@@ -70,7 +70,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
 
     // Room
-    def room_version = "2.3.0"
+    def room_version = "2.4.2"
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
