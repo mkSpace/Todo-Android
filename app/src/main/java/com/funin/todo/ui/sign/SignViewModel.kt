@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.funin.base.extensions.combine
 import com.funin.todo.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

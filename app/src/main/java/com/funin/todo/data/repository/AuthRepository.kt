@@ -6,6 +6,7 @@ import com.funin.todo.data.db.UserDao
 import com.funin.todo.data.remote.AuthRemoteDataSource
 import com.funin.todo.data.vo.Me
 import com.funin.todo.data.vo.User
+import com.funin.todo.network.response.onErrorReturnDataNull
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,13 +18,13 @@ class AuthRepository @Inject constructor(
     private val todoPreferences: TodoSharedPreferences
 ) {
     suspend fun signup(email: String, nickname: String, password: String) {
-        val response = remote.signup(email, nickname, password).data ?: return
+        val response = remote.signup(email, nickname, password).onErrorReturnDataNull() ?: return
         todoPreferences.saveAccessToken(response.accessToken)
         saveMe(response.userId, response.nickname)
     }
 
     suspend fun login(email: String, password: String) {
-        val response = remote.login(email, password).data ?: return
+        val response = remote.login(email, password).onErrorReturnDataNull() ?: return
         todoPreferences.saveAccessToken(response.accessToken)
         saveMe(response.userId, response.nickname)
     }
