@@ -66,6 +66,9 @@ dependencies {
     api("com.squareup.retrofit2:retrofit:$retrofit_version")
     api("com.squareup.retrofit2:converter-gson:$retrofit_version")
 
+    // Retrofit - Coroutine network response adapter
+    api "com.github.haroldadmin:NetworkResponseAdapter:4.1.0"
+
     // Glide
     def glide_version = "4.11.0"
     api("com.github.bumptech.glide:glide:$glide_version")

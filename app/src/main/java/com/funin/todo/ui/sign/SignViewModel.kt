@@ -46,5 +46,4 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
     fun setRewritePasswordField(rewirePassword: String?) {
         _rewritePasswordField.value = rewirePassword
     }
-
 }
