@@ -4,7 +4,6 @@ import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 
 data class Response<T>(
-    val code: String?,
     val data: T? = null,
     val paging: Paging? = null,
     val error: Error? = null,
@@ -14,7 +13,7 @@ data class Response<T>(
 data class Paging(val before: String? = null, val after: String? = null, val total: Long?)
 
 data class Error(
-    val code: Int? = null,
+    val code: String? = null,
     val message: String? = null
 )
 

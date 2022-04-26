@@ -15,7 +15,8 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
     private val _signUpUser: MutableStateFlow<SignUpUser> = MutableStateFlow(SignUpUser())
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    val isLoading: SharedFlow<Boolean> =
+        _isLoading.shareIn(viewModelScope, SharingStarted.Eagerly, 0)
 
     private val _errorMessage: MutableStateFlow<String?> = MutableStateFlow("")
     val errorMessage: SharedFlow<String?> = _errorMessage.shareIn(
@@ -46,13 +47,16 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
     }
 
     fun signup() {
+        _isLoading.value = true
         val signUpUser = _signUpUser.value
         if (!signUpUser.isValidated()) {
             _errorMessage.value = "회원가입 할 수 없습니다."
+            _isLoading.value = false
         }
         if (signUpUser.email == null || signUpUser.nickname == null || signUpUser.password == null) return
         viewModelScope.launch(Dispatchers.IO) {
             authRepository.signup(signUpUser.email, signUpUser.nickname, signUpUser.password)
+            _isLoading.value = false
         }
     }
 
