@@ -42,7 +42,6 @@ class SignUpFragment : BaseViewModelFragment() {
         binding.userRePasswordEditTextView.doOnTextChanged { text, _, _, _ ->
             viewModel.setRewritePasswordField(text.toString())
         }
-        binding.signUpButton.setOnClickListener { viewModel.signup() }
     }
 
     override fun onBindViewModelsOnViewCreated() {
