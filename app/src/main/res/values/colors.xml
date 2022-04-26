@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="link">#0645AD</color>
     <color name="gray">#acacac</color>
+    <color name="primaryColor">#5F54F2</color>
+    <color name="loading_view_mask">#66565656</color>
 </resources>

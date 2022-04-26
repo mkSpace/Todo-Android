@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.TodoComponent" parent="android:Widget" />
+
+    <style name="Widget.TodoComponent.LoadingView" parent="Widget.TodoComponent">
+        <item name="indicator">@drawable/oval</item>
+        <item name="indicatorTint">@color/primaryColor</item>
+        <item name="indicatorRadius">6dp</item>
+        <item name="indicatorPadding">8dp</item>
+    </style>
+</resources>

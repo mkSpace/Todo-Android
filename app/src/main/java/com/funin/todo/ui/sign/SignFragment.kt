@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
-import android.text.method.MovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
@@ -53,7 +52,7 @@ class SignFragment : BaseViewModelFragment() {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             setSpan(
-                object: ClickableSpan() {
+                object : ClickableSpan() {
                     override fun onClick(p0: View) {
                         findNavController().navigate(R.id.fragment_sign_up)
                     }
