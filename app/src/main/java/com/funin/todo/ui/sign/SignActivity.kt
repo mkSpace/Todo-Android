@@ -1,5 +1,6 @@
 package com.funin.todo.ui.sign
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -49,5 +50,13 @@ class SignActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            viewModel.isAuthorized.collectLatest {
+                if (it) {
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    finish()
+                }
+            }
+        }
     }
 }

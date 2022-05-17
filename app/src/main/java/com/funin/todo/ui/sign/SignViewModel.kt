@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
-    private val _signUpUser: MutableStateFlow<SignUpUser> = MutableStateFlow(SignUpUser())
+    private val _signUser: MutableStateFlow<SignUpUser> = MutableStateFlow(SignUpUser())
 
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading: SharedFlow<Boolean> =
@@ -25,39 +25,64 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         replay = 0
     )
 
-    val isSignUpButtonEnabled: StateFlow<Boolean> = _signUpUser
-        .map { it.isValidated() }
+    private val _isAuthorized: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isAuthorized: SharedFlow<Boolean> = _isAuthorized.shareIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        replay = 0
+    )
+
+    val isSignUpButtonEnabled: StateFlow<Boolean> = _signUser
+        .map { it.isValidatedForSignUp() }
         .distinctUntilChanged()
         .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     fun setEmailField(email: String?) {
-        _signUpUser.value = _signUpUser.value.copy(email = email)
+        _signUser.value = _signUser.value.copy(email = email)
     }
 
     fun setNicknameField(nickname: String?) {
-        _signUpUser.value = _signUpUser.value.copy(nickname = nickname)
+        _signUser.value = _signUser.value.copy(nickname = nickname)
     }
 
     fun setPasswordField(password: String?) {
-        _signUpUser.value = _signUpUser.value.copy(password = password)
+        _signUser.value = _signUser.value.copy(password = password)
     }
 
     fun setRewritePasswordField(rewritePassword: String?) {
-        _signUpUser.value = _signUpUser.value.copy(rewritePassword = rewritePassword)
+        _signUser.value = _signUser.value.copy(rewritePassword = rewritePassword)
+    }
+
+    fun signIn() {
+        _isLoading.value = true
+        val signInUser = _signUser.value
+        if (!signInUser.isValidatedForSignIn()) {
+            _errorMessage.value = "유효하지 않는 사용자 정보입니다. 다시 시도해주세요."
+            _isLoading.value = false
+        }
+        if (signInUser.email.isNullOrBlank() || signInUser.password.isNullOrBlank()) return
+        viewModelScope.launch(Dispatchers.IO) {
+            _isAuthorized.value = authRepository.login(signInUser.email, signInUser.password)
+        }
+        _isLoading.value = false
     }
 
     fun signup() {
         _isLoading.value = true
-        val signUpUser = _signUpUser.value
-        if (!signUpUser.isValidated()) {
+        val signUpUser = _signUser.value
+        if (!signUpUser.isValidatedForSignUp()) {
             _errorMessage.value = "회원가입 할 수 없습니다."
             _isLoading.value = false
         }
         if (signUpUser.email == null || signUpUser.nickname == null || signUpUser.password == null) return
         viewModelScope.launch(Dispatchers.IO) {
-            authRepository.signup(signUpUser.email, signUpUser.nickname, signUpUser.password)
-            _isLoading.value = false
+            _isAuthorized.value = authRepository.signup(
+                email = signUpUser.email,
+                nickname = signUpUser.nickname,
+                password = signUpUser.password
+            )
         }
+        _isLoading.value = false
     }
 
     data class SignUpUser(
@@ -66,10 +91,14 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         val password: String? = null,
         val rewritePassword: String? = null
     ) {
-        fun isValidated(): Boolean {
+        fun isValidatedForSignUp(): Boolean {
             return !email.isNullOrBlank() && !nickname.isNullOrBlank()
                     && !password.isNullOrBlank() && !rewritePassword.isNullOrBlank()
                     && password == rewritePassword
+        }
+
+        fun isValidatedForSignIn(): Boolean {
+            return !email.isNullOrBlank() && !password.isNullOrBlank()
         }
     }
 }

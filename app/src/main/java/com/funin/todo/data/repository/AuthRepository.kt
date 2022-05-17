@@ -17,16 +17,19 @@ class AuthRepository @Inject constructor(
     private val meDao: MeDao,
     private val todoPreferences: TodoSharedPreferences
 ) {
-    suspend fun signup(email: String, nickname: String, password: String) {
-        val response = remote.signup(email, nickname, password).onErrorReturnDataNull() ?: return
+    suspend fun signup(email: String, nickname: String, password: String): Boolean {
+        val response =
+            remote.signup(email, nickname, password).onErrorReturnDataNull() ?: return false
         todoPreferences.saveAccessToken(response.accessToken)
         saveMe(response.userId, response.nickname)
+        return true
     }
 
-    suspend fun login(email: String, password: String) {
-        val response = remote.login(email, password).onErrorReturnDataNull() ?: return
+    suspend fun login(email: String, password: String): Boolean {
+        val response = remote.login(email, password).onErrorReturnDataNull() ?: return false
         todoPreferences.saveAccessToken(response.accessToken)
         saveMe(response.userId, response.nickname)
+        return true
     }
 
     private fun saveMe(userId: Int, nickname: String) {
