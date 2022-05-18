@@ -45,6 +45,12 @@ class SignActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launchWhenCreated {
+            viewModel.toastMessage
+                .filterNotNull()
+                .collectLatest(::showToast)
+        }
+
+        lifecycleScope.launchWhenCreated {
             viewModel.isLoading.collectLatest {
                 binding.loadingView.isVisible = it
             }

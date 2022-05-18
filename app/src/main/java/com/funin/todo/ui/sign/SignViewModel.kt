@@ -22,6 +22,10 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         MutableSharedFlow(replay = 1, extraBufferCapacity = 1)
     val errorMessage: Flow<String?> = _errorMessage
 
+    private val _toastMessage: MutableSharedFlow<String?> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = 1)
+    val toastMessage: Flow<String?> = _toastMessage
+
     private val _isAuthorized: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isAuthorized: SharedFlow<Boolean> = _isAuthorized.shareIn(
         scope = viewModelScope,
