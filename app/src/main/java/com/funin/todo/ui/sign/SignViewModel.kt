@@ -18,12 +18,9 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
     val isLoading: SharedFlow<Boolean> =
         _isLoading.shareIn(viewModelScope, SharingStarted.Eagerly, 0)
 
-    private val _errorMessage: MutableStateFlow<String?> = MutableStateFlow("")
-    val errorMessage: SharedFlow<String?> = _errorMessage.shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        replay = 0
-    )
+    private val _errorMessage: MutableSharedFlow<String?> =
+        MutableSharedFlow(replay = 1, extraBufferCapacity = 1)
+    val errorMessage: Flow<String?> = _errorMessage
 
     private val _isAuthorized: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isAuthorized: SharedFlow<Boolean> = _isAuthorized.shareIn(
@@ -57,7 +54,7 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         _isLoading.value = true
         val signInUser = _signUser.value
         if (!signInUser.isValidatedForSignIn()) {
-            _errorMessage.value = "유효하지 않는 사용자 정보입니다. 다시 시도해주세요."
+            _errorMessage.tryEmit("유효하지 않는 사용자 정보입니다. 다시 시도해주세요.")
             _isLoading.value = false
         }
         if (signInUser.email.isNullOrBlank() || signInUser.password.isNullOrBlank()) return
@@ -71,7 +68,7 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         _isLoading.value = true
         val signUpUser = _signUser.value
         if (!signUpUser.isValidatedForSignUp()) {
-            _errorMessage.value = "회원가입 할 수 없습니다."
+            _errorMessage.tryEmit("회원가입 할 수 없습니다.")
             _isLoading.value = false
         }
         if (signUpUser.email == null || signUpUser.nickname == null || signUpUser.password == null) return
