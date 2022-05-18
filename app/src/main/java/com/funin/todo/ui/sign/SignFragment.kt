@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.funin.base.autoCleared
@@ -66,6 +67,12 @@ class SignFragment : BaseViewModelFragment() {
         }.let {
             binding.signUpTextField.movementMethod = LinkMovementMethod.getInstance()
             binding.signUpTextField.setText(it, TextView.BufferType.SPANNABLE)
+        }
+        binding.userEmailEditTextView.doOnTextChanged { text, _, _, _ ->
+            viewModel.setEmailField(text.toString())
+        }
+        binding.userPasswordEditTextView.doOnTextChanged { text, _, _, _ ->
+            viewModel.setPasswordField(text.toString())
         }
 
         binding.signLoginButton.setOnClickListener { viewModel.signIn() }

@@ -63,7 +63,13 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         }
         if (signInUser.email.isNullOrBlank() || signInUser.password.isNullOrBlank()) return
         viewModelScope.launch(Dispatchers.IO) {
-            _isAuthorized.value = authRepository.login(signInUser.email, signInUser.password)
+            val result = authRepository.login(signInUser.email, signInUser.password)
+            if (!result) {
+                _errorMessage.emit("유효하지 않는 사용자 정보입니다. 다시 시도해주세요.")
+            } else {
+                _toastMessage.emit("로그인에 성공하였습니다.")
+            }
+            _isAuthorized.value = result
         }
         _isLoading.value = false
     }
@@ -77,11 +83,17 @@ class SignViewModel @Inject constructor(private val authRepository: AuthReposito
         }
         if (signUpUser.email == null || signUpUser.nickname == null || signUpUser.password == null) return
         viewModelScope.launch(Dispatchers.IO) {
-            _isAuthorized.value = authRepository.signup(
+            val result = authRepository.signup(
                 email = signUpUser.email,
                 nickname = signUpUser.nickname,
                 password = signUpUser.password
             )
+            if (!result) {
+                _errorMessage.emit("유효하지 않는 사용자 정보입니다. 다시 시도해주세요.")
+            } else {
+                _toastMessage.emit("로그인에 성공하였습니다.")
+            }
+            _isAuthorized.value = result
         }
         _isLoading.value = false
     }
