@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.funin.base.autoCleared
 import com.funin.todo.databinding.FragmentSignUpBinding
@@ -18,7 +17,7 @@ import kotlinx.coroutines.flow.collectLatest
 class SignUpFragment : BaseViewModelFragment() {
 
     private var binding by autoCleared<FragmentSignUpBinding>()
-    private val viewModel by viewModels<SignViewModel>()
+    private val viewModel by activityViewModels<SignViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,12 +48,6 @@ class SignUpFragment : BaseViewModelFragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.isSignUpButtonEnabled.collectLatest {
                 binding.signUpButton.isEnabled = it
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.isLoading.collectLatest {
-                binding.loadingView.isVisible = it
             }
         }
     }

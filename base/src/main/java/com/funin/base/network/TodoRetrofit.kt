@@ -1,5 +1,6 @@
 package com.funin.base.network
 
+import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,6 +17,7 @@ object TodoRetrofit {
         .baseUrl(httpUrl)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(NetworkResponseAdapterFactory())
         .build()
         .create(service)
 

@@ -12,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.funin.base.autoCleared
 import com.funin.todo.R
@@ -23,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SignFragment : BaseViewModelFragment() {
 
     private var binding by autoCleared<FragmentSignBinding>()
+    private val viewModel by activityViewModels<SignViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,5 +68,13 @@ class SignFragment : BaseViewModelFragment() {
             binding.signUpTextField.movementMethod = LinkMovementMethod.getInstance()
             binding.signUpTextField.setText(it, TextView.BufferType.SPANNABLE)
         }
+        binding.userEmailEditTextView.doOnTextChanged { text, _, _, _ ->
+            viewModel.setEmailField(text.toString())
+        }
+        binding.userPasswordEditTextView.doOnTextChanged { text, _, _, _ ->
+            viewModel.setPasswordField(text.toString())
+        }
+
+        binding.signLoginButton.setOnClickListener { viewModel.signIn() }
     }
 }
